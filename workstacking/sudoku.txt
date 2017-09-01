@@ -1,0 +1,104 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+int sum_p=0;
+int div_x,div_y;
+
+int div1(int a,int b){
+    if(a%b==0)return (a/b)-1;
+    return a/b;
+}
+int **crarr(int n){
+    int i,**arr;
+    n++;
+    arr=(int**)malloc(sizeof(int**)*n);
+    for(i=0;i<n;i++)
+        arr[i]=(int*)malloc(sizeof(int*)*n);
+    return arr;
+}
+int ***crsqarr(int n){
+    int i,j,***arr;
+    n++;
+    arr=(int***)malloc(sizeof(int***)*div_x);
+    for(i=0;i<div_x;i++){
+        arr[i]=(int**)malloc(sizeof(int**)*div_y);
+        for(j=0;j<div_y;j++){
+            arr[i][j]=(int*)malloc(sizeof(int*)*n);
+        }
+    }
+    return arr;
+}
+void print_sudo(int **arr,int n){
+    int i,j;
+    for(i=1;i<=n;i++){
+        for(j=1;j<=n;j++)printf("%d ",arr[i][j]);
+        printf("\n");
+    }
+}
+void solve_sudo(int** arr,int** check_x,int** check_y,int n,int x,int y,int*** check_sq){
+    int i,j,tmp;
+    if(y>n){
+        x++;
+        y=1;
+    } 
+    if(x>n){
+        printf("----------------------------------\n\t\tPattern %d\n----------------------------------\n",sum_p+1);
+        print_sudo(arr,n);
+        printf("----------------------------------\n\n");
+        sum_p++;
+        return;
+    }
+    if(arr[x][y]>0){
+        solve_sudo(arr,check_x,check_y,n,x,y+1,check_sq);
+    }else{
+        for(i=1;i<=n;i++){
+            if(!check_x[x][i] && !check_y[y][i] && !check_sq[div1(x,div_x)][div1(y,div_y)][i]){
+                check_x[x][i]=check_y[y][i]=check_sq[div1(x,div_x)][div1(y,div_y)][i]=1;
+                arr[x][y]=i;
+                solve_sudo(arr,check_x,check_y,n,x,y+1,check_sq);
+                check_x[x][i]=check_y[y][i]=check_sq[div1(x,div_x)][div1(y,div_y)][i]=0;
+                arr[x][y]=0;
+            }    
+        }
+    }
+}
+int int_sudo(int** arr,int n){
+    int **check_x=crarr(n),**check_y=crarr(n);
+    int ***check_sq=crsqarr(n);
+    int i,j,k;
+    for(i=1;i<=n;i++)
+        for(j=1;j<=n;j++){
+            check_x[i][j]=check_y[i][j]=0;
+        }
+    for(i=0;i<div_x;i++)
+        for(j=0;j<div_y;j++)
+            for(k=1;k<=n;k++)
+                check_sq[i][j][k]=0;
+    for(i=1;i<=n;i++)
+        for(j=1;j<=n;j++){
+            if(arr[i][j]>0){
+                if(check_x[i][arr[i][j]] || check_y[j][arr[i][j]] || check_sq[div1(i,div_x)][div1(j,div_y)][arr[i][j]])return 0;
+                check_sq[div1(i,div_x)][div1(j,div_y)][arr[i][j]]=1;
+                check_x[i][arr[i][j]]=1;
+                check_y[j][arr[i][j]]=1;
+            }
+        }
+    solve_sudo(arr,check_x,check_y,n,1,1,check_sq); 
+    return 1;
+}
+int main(){
+    int n,x,y,**arr;
+    scanf("%d",&n);
+    div_x=(int)floor(sqrt(n));
+    div_y=(int)ceil(sqrt(n));
+    arr=crarr(n);
+    for(x=1;x<=n;x++)
+        for(y=1;y<=n;y++)
+            scanf("%d",&arr[x][y]);
+    if(!int_sudo(arr,n))
+        printf("Error input.\n");
+    else
+        printf("Sudoku have %d pattern.\n",sum_p);
+    return 0;
+}       

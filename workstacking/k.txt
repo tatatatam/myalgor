@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int arr_ob[1000000],arr_mon[1000000];
+//int use[1000000],pick[1000000];
+int mon[1000000];
+struct node{
+    int w;
+    int *use;
+    int mon;
+    struct node *next;
+};
+
+void run(int max_w,int max_ob,int k){
+    int i,j;
+    //int max=0;
+    //int num_pick=1;
+    struct node *tmp,*new,*last,*start;
+    new=(struct node*)malloc(sizeof(struct node));
+    mon[arr_ob[0]]=arr_mon[0];
+    new->w=arr_ob[0];
+    new->mon=arr_mon[0];
+    new->use=(int*)malloc(sizeof(int)*max_ob);
+    new->use[0]++;
+    last=start=new;
+    for(i=1;i<max_ob;i++){
+        new=(struct node*)malloc(sizeof(struct node));
+        mon[arr_ob[i]]=arr_mon[i];
+        new->w=arr_ob[i];
+        new->mon=arr_mon[i];
+        new->use=(int*)malloc(sizeof(int)*max_ob);
+        new->use[i]++;
+        last->next=new;
+        last=new;
+    }
+    while(start!=NULL){
+        //printf("%d %d %d %d \n",start->w,k,start->use[i],i);
+        for(i=0;i<max_ob;i++){
+            //printf("%d %d %d %d %d %d %d %d %d\n",i,start->mon,max_w,start->w,arr_ob[i],start->use[i],k,start->mon+arr_mon[i],mon[start->w+arr_ob[i]]);
+            //printf("aaaa %d %d %d %d %d %d\n",start->w+arr_ob[i],max_w,start->use[i]+1,k,mon[start->w+arr_ob[i]],start->mon+arr_mon[i]);
+            if(start->w+arr_ob[i]<=max_w && start->use[i]+1<=k && mon[start->w+arr_ob[i]] < start->mon+arr_mon[i]){
+               printf("pass %d %d %d %d %d %d %d %d\n",i,start->mon,start->w,arr_ob[i],start->use[i],k,start->mon+arr_mon[i],mon[start->w+arr_ob[i]]);
+                new=(struct node*)malloc(sizeof(struct node));
+                mon[start->w+arr_ob[i]]=start->mon+arr_mon[i];
+                new->w=start->w+arr_ob[i];
+                new->mon=start->mon+arr_mon[i];
+                new->use=start->use;
+                new->use[i]++;
+                last->next=new;
+                last=new;
+            }
+        }
+        start=start->next;
+    }
+    printf("%d",mon[max_w]);
+    /*for(i=0;i<max_ob;i++){
+        for(j=1;j<=num_pick;j++){
+            //printf("r %d %d %d %d %d\n",j,use[j],use[j-1],arr_mon[i],pick[j-1]+arr_ob[i]);
+            if(use[j-1]+arr_mon[i]>use[j]+arr_mon[i] && pick[j-1]+arr_ob[i]<=max_w){
+                //printf("a %d %d %d %d\n",j,use[j],use[j-1],arr_mon[i]);
+                use[j]=use[j-1]+arr_mon[i];
+                pick[j]=pick[j-1]+arr_ob[i];
+                if(use[j]>max)max=use[j];
+                num_pick++;
+                break;
+            }else if(use[j-1]+arr_mon[i]<=use[j]+arr_mon[i] && pick[j]+arr_ob[i]<=max_w){
+                //printf("a %d %d %d %d\n",j,use[j],use[j-1],arr_mon[i]);
+                use[j]=use[j]+arr_mon[i];
+                pick[j]=pick[j]+arr_ob[i];
+                if(use[j]>max)max=use[j];
+                num_pick++;
+                break;
+            }
+        }
+    }
+   // for(i=0;i<num_pick;i++)*/
+    //printf("%d\n",max);
+}
+
+int main(){
+    int max_w,max_ob;
+    int i,k;
+    scanf("%d%d%d",&max_w,&max_ob,&k);    
+    for(i=0;i<max_ob;i++){
+        scanf("%d",&arr_ob[i]);
+    }
+    for(i=0;i<max_ob;i++)
+        scanf("%d",&arr_mon[i]);
+    run(max_w,max_ob,k);
+    return 0;
+}
