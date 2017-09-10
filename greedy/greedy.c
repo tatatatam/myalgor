@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define MAX 30
+#define MAX 8
    void swap(double *xp, double *yp)
    {
    double temp = *xp;
@@ -25,8 +25,10 @@
 
           // Last i elements are already in place
           for (j = 0; j < n-i-1; j++)
-              if (cloner[j] > cloner[j+1]){
-                  swap(&cloner[j], &cloner[j+1]);
+              // if (cloner[j]-arr2[j]>cloner[j+1]-arr2[j+1]){//sort diff
+                if (cloner[j]>cloner[j+1]){//normal
+                // printf("%.2lf %.2lf\n",cloner[j],cloner[j+1]);
+                  swap(&(cloner[j]), &(cloner[j+1]));
                   swap(&arr2[j],&arr2[j+1]);
                   swap2(&count[j],&count[j+1]);
                }
@@ -38,14 +40,69 @@
       int i;
       printf("%d ** %.2lf->%.2lf||->",count[0]+1,data_s[0],data_f[0]);
 
-      for(int i=1;i<=MAX;i++){
-        // if(data_s[i]>=8.00 && data_f[i]<=17.00 )
-        if(data_s[i]>=data_f[j]){
+      for(int i=1;i<MAX;i++){
+        // if()
+        // if(data_s[j]>=data_f[i]){//normal
+        if((data_s[j]>=data_f[i]&&data_f[j]>data_f[i])||(data_f[j]<=data_s[i])){
+        // if(data_s[i]>=data_f[j]){
           printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
           j=i;
         }
       }
 
+    }
+    void greed_act2(double a[],double data_s[],double data_f[],int count[]){
+      // double s[MAX] = a[1];
+      int j=0;
+      int i;
+      printf("%d ** %.2lf->%.2lf||->",count[0]+1,data_s[0],data_f[0]);
+
+      int trigger =0;
+      int k=0;
+
+      int day=0;
+      while(trigger == 0){
+        for(int i=1;i<MAX;i++){
+
+          if(data_s[i]>=data_f[j]){//normal
+
+          if(data_s[i]!=0&&data_f[i]!=0){
+            printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
+            count[j]=0;
+            data_s[j]=0;
+            data_f[j]=0;
+            j=i;
+
+            }else{
+              k++;
+              j=i;
+            }
+          }
+
+          // if(data_s[i]==0&&data_f[i]==0&k==MAX){
+          //     printf("\nasdf%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
+          // }
+          //  if(data_s[i]==0){
+          //   k++;
+          //   // printf("%d ** %.2lf->%.2lf||->%d",count[i]+1,data_s[i],data_f[i],k);
+          // }
+          if(k==MAX){
+            trigger = 1;
+          }
+          if(i+1==MAX){
+
+            count[j]=0;
+            data_s[j]=0;
+            data_f[j]=0;
+          }
+        }j=0;
+        printf("\n");
+        day++;
+      }
+      for(i=0;i<MAX;i++){
+          printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
+      }
+      printf("\n%d",day);
     }
       int greed(double data_s[MAX], double data_f[MAX],int count[]){
         // qsort(data);
@@ -53,7 +110,8 @@
         bubbleSort(data_f,data_s,MAX,cloner,count);
         int i ;
         for(i=0;i<MAX;i++)printf("%00.2lf|%00.2lf|%00.2lf|%d\n",data_s[i],data_f[i],cloner[i],count[i]);
-        greed_act(data_f,data_s,cloner,count);
+        // greed_act(data_f,data_s,cloner,count);
+        greed_act2(data_f,data_s,cloner,count);
         return 0;
       }
 
@@ -73,7 +131,7 @@
     double data_f[MAX];
     int position[MAX];
     int count=0;
-     fp = fopen("schedule.txt","r");
+     fp = fopen("2301365_lab3_2017_1sol_2.txt","r");
      fscanf (fp, "%d", &i);
      fscanf (fp, "%lf", &j);
      fscanf (fp, "%lf", &k);
@@ -82,20 +140,15 @@
           data_s[count]=j;
           data_f[count]=k;
           position[count]=count;
-          // printf ("%d AND %d ", i,j);
           fscanf (fp, "%d", &i);
           fscanf (fp, "%lf", &j);
           fscanf (fp, "%lf", &k);
-
-          // printf("%d %.2lf %.2lf\n",i,data_s[count],data_f[count]);
           count++;
-          // printf("%d and %d GCD ASWER: %d\n",i,j, gcd(i,j));
         }
 
 
-        // printf("ฟหกดฟหกด%.2lf %.2lf \n",data_s[0],data_f[0]);
+
         greed(data_s,data_f,position);
-        // if(data[30][1])printf("%lf",data[101][1]);
-      //    fclose(fp);
+
       return 0;
   }
