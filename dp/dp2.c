@@ -16,6 +16,7 @@
 		int k;
 		double res=MAX;
 			for(k=i+1;k<j;k++){
+				printf("%d",i);
 				res = min(res,(
 					cmt(data,i,k)+cmt(data,k,j)
 					+cost(data,i,j,k)));
@@ -25,11 +26,8 @@
 		return res;
 	}
 	int main(){
-		double data[5][2] = {{0, 0},
-		 					 {1, 0},
-							 {2, 1},
-							 {1, 2},
-							 {0, 2}
+		double data[5][2] = {
+			{0, 0}, {1, 0}, {2, 1}, {1, 2}, {0, 2}
 						 	};
 		int x =2;
 		int y =0;

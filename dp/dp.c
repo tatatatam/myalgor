@@ -1,19 +1,31 @@
 #include<stdio.h>
   int gb=0;
-  int dpact(int a[],int t[],int n,int node){
-    if(node==0)
+  int dpact(int a[],int t[],int n,int* node){
+    if(node==0){
       if((a[n][node+1]+t[n][node])<=a[n+1][node]){
-        return a[n][node+1]+t[n][node]+dpact(a,t,n++,node+1);
+		  printf("%d0 ",n);
+        return a[n][node+1]+t[n][node]+dpact(a,t,n+1,node+1);
       }else{
-        return a[n][node]
+		  printf("%d1 ",n);
+        return a[n][node]+dpact(a,t,n+1,node);
       }
+  	}else{
+		if((a[n][node]+t[n][node])<=a[n+1][node])){
+			    return a[n][node+1]+t[n][node]+dpact(a,t,n+1,node+1);
+		}
+
+  	}
+	  printf("\n");
   }
   void dppath(int e[],int x[],int* a,int* t){
+	  int pointer = 0;
     if(e[0]>=e[1]){
-      gb=e[0]+dpact(a,t,0,0);
+      gb=e[0]+dpact(a,t,0,(int *)pointer);
     }else{
-      gb=e[1]+dpact(a,t,0,1);
+		pointer =1;
+      gb=e[1]+dpact(a,t,0,(int *)pointer);
     }
+	printf("%d---\n",gb);
   }
   void main(){
     int n;//station
