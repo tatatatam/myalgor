@@ -33,6 +33,14 @@
                   swap2(&count[j],&count[j+1]);
                }
     }
+	double caltime(double a,double b){
+
+		int x = (a - (double)((int)a))*100/60;
+		int y = (b - (double)((int)b))*100/60;
+
+		int result = (a+x)*60 -(b+y)*60;
+		return result ;//minutes
+	}
 
     void greed_act(double a[],double data_s[],double data_f[],int count[]){
       // double s[MAX] = a[1];
@@ -53,6 +61,7 @@
     }
     void greed_act2(double a[],double data_s[],double data_f[],int count[]){
       // double s[MAX] = a[1];
+	  double time =0;
       int j=0;
       int i;
       printf("%d ** %.2lf->%.2lf||->",count[0]+1,data_s[0],data_f[0]);
@@ -68,6 +77,7 @@
 
           if(data_s[i]!=0&&data_f[i]!=0){
             printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
+			time += caltime(data_f[i],data_s[i]);
             count[j]=0;
             data_s[j]=0;
             data_f[j]=0;
@@ -90,18 +100,19 @@
             trigger = 1;
           }
           if(i+1==MAX){
-
             count[j]=0;
             data_s[j]=0;
             data_f[j]=0;
           }
         }j=0;
+		printf("%f",time/60.00);
+		time=0;
         printf("\n");
         day++;
       }
-      for(i=0;i<MAX;i++){
-          printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
-      }
+    //   for(i=0;i<MAX;i++){
+    //       printf("%d ** %.2lf->%.2lf||->",count[i]+1,data_s[i],data_f[i]);
+    //   }
       printf("\n%d",day);
     }
       int greed(double data_s[MAX], double data_f[MAX],int count[]){
@@ -147,7 +158,7 @@
         }
 
 
-
+		// printf("%f",caltime(data_f[1],data_s[1]));
         greed(data_s,data_f,position);
 
       return 0;

@@ -65,8 +65,8 @@
           // printf("barray%lli \n",modder);
       n = n/modder;
       b[k] = modder;
-      k++;
-      }modder++;
+	      k++;
+	      }modder++;
     }
     if(modder<min_mod)min_mod =modder-1;
     modder=2;
@@ -76,8 +76,7 @@
     // for(k=0;k<200;k++){
     // }
     while(a[k]<=min_mod&&b[l]<=min_mod){
-
-      // printf("%lli %lli %lli\n",a[k],b[l],min_mod);
+      printf("%lli %lli %lli\n",a[k],b[l],min_mod);
       if(a[k]==b[l]){
         value *= a[k];
         k++;l++;
