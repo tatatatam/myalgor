@@ -76,9 +76,14 @@ while True:
                 g.addEdge(int(a)-1, int(b)-1)
                 # matrix[int(a)-1][int(b)-1]=1
                 # print(g.graph)
+        answer=1
         for i in range(int(n)):
             for j in range(int(n)):
-                if g.isReachable(i,j):print('ok %d %d',i,j)
-                else: print('err %d %d',i,j)
-
+                if g.isReachable(i,j):
+                    print('ok %d %d',i,j)
+                    # answer=1
+                else:
+                    print('err %d %d',i,j)
+                    answer = 0
+        print(answer)
         # walking(matrix)
